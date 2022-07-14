@@ -1,0 +1,11 @@
+.searchBox{
+    width: 70%;
+    height: 60px;
+    
+}
+.searchContainer{
+    border: 1px solid whitesmoke;
+    width: 72%;
+    height: 60px;
+    margin: auto;
+}
