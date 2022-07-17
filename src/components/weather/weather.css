@@ -14,10 +14,11 @@
     font-size:18px;
     font-weight: 400;
     padding: 2px ;
-    outline: none;
+    outline:none;
     border: none;
     
 }
+
 .searchContainer{
 
     box-shadow: 0 8px 10px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 10%), 0 -8px 12px 0 rgb(0 0 0 / 5%), 0 -2px 3px -2px rgb(0 0 0 / 1%);
@@ -31,6 +32,7 @@
     text-transform: capitalize;
     transition: box-shadow .2s ease;
     width: 92%;
+    outline:coral;
     /* border: 1px solid black;
     border-radius: 5px;
     width: 55%;
@@ -40,12 +42,17 @@
     display: flex;
     align-items: center; */
 }
+
 ::placeholder{
     font-size: 20px;
     font-weight: 500;
 }
 ul{
     list-style: none;
+}
+.searchListContainer{
+    box-shadow: 0 8px 10px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 10%), 0 -8px 12px 0 rgb(0 0 0 / 5%), 0 -2px 3px -2px rgb(0 0 0 / 1%);
+    border-radius: 8px;
 }
 .searchList{
 display: flex;
@@ -55,6 +62,9 @@ justify-content: space-between;
 .searchListItem{
     display: flex;
     align-items: center;
+}
+.countryCode{
+   line-height: 0%;
 }
 .dailyForcastContainer{
     width: 100%;

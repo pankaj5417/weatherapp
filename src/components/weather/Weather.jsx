@@ -260,6 +260,8 @@ function Weather() {
             </div>
 
           </div>
+          <br />
+          <br />
 
           <Chart
               className="chart"
