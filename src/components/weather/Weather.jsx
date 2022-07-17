@@ -11,7 +11,7 @@ import "./weather.css";
 function Weather() {
   const [weatherData, setWeatherData] = useState(null);
   const [forcast, setForcast] = useState([]);
-  const [city, setCity] = useState("");
+  const [city, setCity] = useState("Patna");
   const [data, setData] = useState([]);
   const [latitude, setLatitude] = useState(null);
   const [lng, setLng] = useState(null);
@@ -86,20 +86,24 @@ function Weather() {
     const inputVal = e.target.value;
     // setCity(prev=>prev=inputVal)
     // debounce(getWeather,1000)
+    setCity(inputVal)
     debounceWeather(inputVal);
   };
-  async function getWeather(city) {
+  async function getWeather(cityname) {
     try {
       const res = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=1fe85b3ad8fa502e23bf446831171936`
+        `https://api.openweathermap.org/data/2.5/weather?q=${cityname}&units=metric&appid=1fe85b3ad8fa502e23bf446831171936`
       );
       console.log(res.data);
-      setWeatherData(res.data);
+      setWeatherData(await res.data);
     } catch (err) {
       console.log(err);
     }
   }
 
+// useEffect(()=>{
+//   getWeather()
+// },[city])
   useEffect(() => {
     weatherData && getWeather2();
   }, [weatherData]);
@@ -142,10 +146,10 @@ function Weather() {
             />
             <input
               type="search"
-              
+              value={city}
               className="searchBox"
               placeholder="Search..."
-              onInput={handleChange}
+              onChange={handleChange}
             />
             <img
               className="searchIcon"
@@ -153,6 +157,8 @@ function Weather() {
               alt=""
             />
           </div>
+          {weatherData && (
+                  <>
           <section className="searchOutputContainer">
             <ul className="searchListContainer">
               <li className="searchList">
@@ -175,6 +181,8 @@ function Weather() {
               </li>
             </ul>
           </section>
+          </>
+          )}
           <div className="dailyForcastContainer">
             {forcast?.map((fdata) => (
               <>
@@ -229,7 +237,7 @@ function Weather() {
               className="chart"
               options={options}
               type="area"
-              width="850"
+              width="100%"
               series={options.series}
             />
           </div>
@@ -247,13 +255,13 @@ function Weather() {
 
           <div className="sunriseSunsetContainer flex">
             <div className="sunrise">
-          <p>Sunrise</p><p>{new Date(weatherData?.sys.sunrise * 1000).toLocaleTimeString(
+          <p>Sunrise</p><p>{weatherData&&new Date(weatherData?.sys.sunrise * 1000).toLocaleTimeString(
                   "en-IN"
                 )}</p>
 
             </div>
             <div className="sunset">
-          <p>Sunset</p><p> {new Date(weatherData?.sys.sunset * 1000).toLocaleTimeString(
+          <p>Sunset</p><p> {weatherData && new Date(weatherData?.sys.sunset * 1000).toLocaleTimeString(
                   "en-IN"
                 )}</p>
 
@@ -267,7 +275,7 @@ function Weather() {
               className="chart"
               options={options2}
               type="area"
-              width="850"
+              width="100%"
               series={options2.series}
             />
 
