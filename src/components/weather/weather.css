@@ -33,6 +33,7 @@
     transition: box-shadow .2s ease;
     width: 98%;
     outline:coral;
+    margin-bottom: 0;
     /* border: 1px solid black;
     border-radius: 5px;
     width: 55%;
@@ -53,6 +54,11 @@ ul{
 .searchListContainer{
     box-shadow: 0 8px 10px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 10%), 0 -8px 12px 0 rgb(0 0 0 / 5%), 0 -2px 3px -2px rgb(0 0 0 / 1%);
     border-radius: 8px;
+    width: 97%;
+
+    height: 55px;
+    padding: 1rem 1.75rem 1rem 1rem;
+    margin-top: 0;
 }
 .searchList{
 display: flex;
@@ -84,6 +90,8 @@ justify-content: space-between;
 }
 .weatherBottom{
     margin-top: 20px;
+    font-size: 18px;
+    font-weight: 400;
     width: 100%;
     box-shadow: 0 8px 10px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 10%), 0 -8px 12px 0 rgb(0 0 0 / 5%), 0 -2px 3px -2px rgb(0 0 0 / 1%);
     border-radius: 8px;

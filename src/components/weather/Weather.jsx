@@ -48,12 +48,12 @@ function Weather() {
     series: [
       {
         name: "dayinfo",
-        data: ['6am','12pm','7pm'],
+        data: [`${new Date(weatherData?.sys.sunrise * 1000).toLocaleTimeString( "en-IN" )}`,'12pm',`${new Date(weatherData?.sys.sunset * 1000).toLocaleTimeString("en-IN" )}`],
       },
     ],
     xaxis: {
       categories: [
-        '5am','6am','7am','12pm','6pm'
+        `${new Date(weatherData?.sys.sunrise * 1000).toLocaleTimeString( "en-IN" )}`,'12pm',`${new Date(weatherData?.sys.sunset * 1000).toLocaleTimeString("en-IN" )}`
       ],
     },
   };
@@ -130,7 +130,7 @@ function Weather() {
   const formatToLocaleTime = (
     secs,
     zone,
-    format = "cccc,dd LLL yyyy' | Local time: 'hh:mm a"
+    format = "cccc,dddd LL yyyy' | Local time: 'hh:mm a"
   ) => DateTime.fromSeconds(secs).setZone(zone).toFormat(format);
 
   return (
@@ -189,7 +189,7 @@ function Weather() {
               <>
                 <div className="dailyForcast">
                   <p>
-                    {formatToLocaleTime(fdata.dt, weatherData?.timezone, "ccc")}
+                    {formatToLocaleTime(fdata.dt, weatherData?.timezone, "cccc")}
                   </p>
                   <span> {Math.round(fdata.temp.max)} &deg;C</span>&nbsp;
                   <span> {Math.round(fdata.temp.min)} &deg;C</span>
@@ -212,7 +212,8 @@ function Weather() {
             <>
               <p>Weather Information</p>
               <p>{weatherData?.name}</p>
-              <p>{weatherData?.coord.lat}</p>
+
+              {/* <p>{weatherData?.coord.lat}</p>
               <p>{weatherData?.coord.lon}</p>
               <p>Temprature: {weatherData.main.temp} &deg;C</p>
               <p>
@@ -228,7 +229,8 @@ function Weather() {
                 )}
               </p>
               <p>Description: {weatherData.weather[0].main}</p>
-              <p>Humidity: {weatherData.main.humidity} %</p>
+              <p>Humidity: {weatherData.main.humidity} %</p> */}
+
               <p>Day: {moment().format("dddd")}</p>
               <p>Date: {moment().format("LL")}</p>
             </>
