@@ -139,6 +139,7 @@ function Weather() {
         <div className="weatherContainer">
           <div className="searchContainer">
             <img
+            onLoad={()=>getWeather(city)}
             onClick={getLocation}
               className="locationIcon"
               src="https://www.freeiconspng.com/thumbs/location-icon-png/location-icon-png-0.png"
