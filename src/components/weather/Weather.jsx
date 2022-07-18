@@ -7,7 +7,7 @@ import moment from "moment";
 
 import { useState } from "react";
 import "./weather.css";
-//const city='delhi'
+
 function Weather() {
   const [weatherData, setWeatherData] = useState(null);
   const [forcast, setForcast] = useState([]);
@@ -107,8 +107,7 @@ function Weather() {
 
   const handleChange = (e) => {
     const inputVal = e.target.value;
-    // setCity(prev=>prev=inputVal)
-    // debounce(getWeather,1000)
+    
     setCity(inputVal);
     debounceWeather(inputVal);
   };
@@ -124,13 +123,10 @@ function Weather() {
     }
   }
 
-  // useEffect(()=>{
-  //   getWeather()
-  // },[city])
+  
   useEffect(() => {
     weatherData && getWeather2();
   }, [weatherData]);
-  // weatherData && getWeather2()
 
   const debounceWeather = debounce((query) => {
     getWeather(query);
@@ -141,13 +137,18 @@ function Weather() {
   async function getWeather2() {
     let lat = await weatherData?.coord.lat;
     let lon = await weatherData?.coord.lon;
-    const res = await axios.get(
-      `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutelyalerts&units=metric&appid=1fe85b3ad8fa502e23bf446831171936`
-    );
-    console.log(res.data.daily);
-    console.log(res);
-    setData(res.data.hourly.map((d) => Math.round(d.temp)));
-    setForcast(res.data.daily);
+    try{
+      const res = await axios.get(
+        `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutelyalerts&units=metric&appid=1fe85b3ad8fa502e23bf446831171936`
+      );
+      console.log(res.data.daily);
+      console.log(res);
+      setData(res.data.hourly.map((d) => Math.round(d.temp)));
+      setForcast(res.data.daily);
+
+    }catch(err){
+      console.log(err)
+    }
   }
 
   const formatToLocaleTime = (
@@ -210,7 +211,7 @@ function Weather() {
           <div className="dailyForcastContainer">
             {forcast?.map((fdata) => (
               <>
-                <div className="dailyForcast">
+                <div key={fdata.dt} className="dailyForcast">
                   <p>
                     {formatToLocaleTime(
                       fdata.dt,
@@ -244,6 +245,8 @@ function Weather() {
               <p>Date: {moment().format("LL")}</p>
             </>
           )}
+          <br />
+          <br />
           <div className="chartContainer">
             <Chart
               className="chart"
@@ -253,6 +256,8 @@ function Weather() {
               series={options.series}
             />
           </div>
+          <br />
+          <br />
           <div className="humidPressContainer flex">
             <div className="pressure">
               <p>Pressure</p>
@@ -293,7 +298,6 @@ function Weather() {
             options={options2}
             type="area"
             width="100%"
-            backgroundColor="white"
             series={options2.series}
           />
         </div>
