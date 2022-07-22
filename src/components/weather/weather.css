@@ -77,10 +77,15 @@ ul {
   display: flex;
   margin: auto;
 }
-.dailyForcast {
+.list{
+  border: 3px solid rgb(0, 166, 250);
+  border-radius: 2px;
+
+}
+.dailyForecast {
   margin:4px;
 border-radius:3px ;
-  background-color:#fffdf7;
+  background-color:#F9FBE7;
 }
 .icon {
   width: 140px;
@@ -101,6 +106,8 @@ border-radius:3px ;
 
 .chartContainer {
   width: 100%;
+  overflow-x: scroll;
+  overflow-y:auto;
   margin: auto;
 }
 .chart {

@@ -16,6 +16,15 @@ function Weather() {
   const [latitude, setLatitude] = useState(null);
   const [lng, setLng] = useState(null);
   const [status, setStatus] = useState(null);
+  const [border,setBorder]=useState("")
+  const [hr,setHr]=useState([])
+  const [list, setList] = useState(forcast&&forcast[0]?.dt);
+
+    const handleList = (title) => {
+        let temp = forcast?.filter((p) => p.dt === title);
+        setList(temp);
+    };
+    console.log(list);
 
   var options = {
     chart: {
@@ -31,10 +40,7 @@ function Weather() {
       },
     ],
     xaxis: {
-      categories: [
-        12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-        10, 11, 12,
-      ],
+      categories:hr
     },
   };
 
@@ -144,6 +150,16 @@ function Weather() {
       console.log(res.data.daily);
       console.log(res);
       setData(res.data.hourly.map((d) => Math.round(d.temp)));
+      // setHr(res.data.hourly.map((d) => new Date(d.dt * 1000).toLocaleTimeString(
+      //   "en-IN"
+      // )))
+
+      setHr(res.data.hourly.map((d) => formatToLocaleTime(
+        d.dt,
+        weatherData?.timezone,
+        "hh"
+      )))
+      
       setForcast(res.data.daily);
 
     }catch(err){
@@ -209,9 +225,9 @@ function Weather() {
             </>
           )}
           <div className="dailyForcastContainer">
-            {forcast?.map((fdata) => (
+            {forcast?.map((fdata,ind) => (
               <>
-                <div key={fdata.dt} className="dailyForcast">
+                <div key={fdata.dt}  onClick={() => handleList(fdata.dt)} className={`dailyForecast ${list&&list[0]?.dt === fdata.dt ? "list" : ""}`}  >
                   <p>
                     {formatToLocaleTime(
                       fdata.dt,
@@ -247,16 +263,31 @@ function Weather() {
           )}
           <br />
           <br />
+          <h3>24-hour temperature forecast</h3>
           <div className="chartContainer">
             <Chart
               className="chart"
               options={options}
+              curve="smooth"
               type="area"
               width="100%"
               series={options.series}
             />
           </div>
           <br />
+          <div>
+        <div style={{padding:'5px'}}>
+                    <iframe
+                        title={city}
+                        src={`https://maps.google.com/maps?q=${city}=&z=13&ie=UTF8&iwloc=&output=embed`}
+                        
+                        border="0" 
+                        width="100%" 
+                        height="450" 
+                        style={{border:"0"}}
+                    />
+                </div>
+    </div>
           <br />
           <div className="humidPressContainer flex">
             <div className="pressure">
@@ -302,6 +333,7 @@ function Weather() {
           />
         </div>
       </div>
+      
     </>
   );
 }
