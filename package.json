@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "apexcharts": "^3.35.3",
     "axios": "^0.27.2",
+    "cities.json": "^1.1.10",
     "lodash": "^4.17.21",
     "luxon": "^3.0.1",
     "moment": "^2.29.4",

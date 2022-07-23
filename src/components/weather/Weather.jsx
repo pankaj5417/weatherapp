@@ -4,9 +4,11 @@ import { debounce } from "lodash";
 import { DateTime } from "luxon";
 import Chart from "react-apexcharts";
 import moment from "moment";
+import cities from 'cities.json';
 
 import { useState } from "react";
 import "./weather.css";
+import { Cities2 } from "../../cities2";
 
 function Weather() {
   const [weatherData, setWeatherData] = useState(null);
@@ -28,14 +30,26 @@ function Weather() {
 
   var options = {
     chart: {
-      type: "line",
+      type: "area",
     },
     stroke: {
       curve: "smooth",
     },
+    dataLabels: {
+      enabled: false
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.7,
+        opacityTo: 0.9,
+        stops: [0, 90, 100]
+      }
+    },
     series: [
       {
-        name: "weather",
+        name: "Temperature",
         data: data.slice(0, 25),
       },
     ],
@@ -46,18 +60,28 @@ function Weather() {
 
   var options2 = {
     chart: {
-      type: "line",
+      type: "area",
+    },
+    dataLabels: {
+      enabled: false
     },
     stroke: {
       curve: "smooth",
     },
     fill: {
-      colors: ["#E65100", "#FF8F00", "#9C27B0"],
+      type: "gradient",
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.7,
+        opacityTo: 0.9,
+        stops: [0, 90, 100]
+      },
+      colors: ["#F9A825", "#FF8F00", "#9C27B0"],
     },
 
     series: [
       {
-        name: "dayinfo",
+        name: "dayInfo",
 
         data: [
           `${new Date(weatherData?.sys.sunrise * 1000).toLocaleTimeString(
@@ -96,6 +120,9 @@ function Weather() {
           setLatitude(position.coords.latitude);
           setLng(position.coords.longitude);
           getAddress();
+          getCity(position.coords.latitude,position.coords.longitude)
+         // getgeoLocation()
+
         },
         () => {
           setStatus("Unable to retrieve your location");
@@ -103,6 +130,35 @@ function Weather() {
       );
     }
   };
+//console.log(typeof latitude,lng)
+  function getCity(lati,long){
+   const cityname= cities.filter((c)=>{   
+      return (lati?.toFixed(2)===((+c.lat).toFixed(2)) && long?.toFixed(2)===((+c.lng).toFixed(2)))
+       
+      
+   })
+    console.log('cityname',cityname[0].name)
+    console.log('cityname')
+
+
+    setCity(cityname[0].name)
+  }
+/*
+ async function getgeoLocation(){
+   const res= fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAH5gK2NXfXvDSDJAyUi6Na8qWL8xCrLk4',{
+      method:"POST",
+      headers:{
+        'Content-Type':"application/json"
+      },
+      mode:"no-cors"
+    })
+    const data=await res.json()
+    console.log("location",data)
+
+  }
+
+  console.log(cities)
+  */
 
   const getAddress = async () => {
     const res = await axios.get(
@@ -268,7 +324,7 @@ function Weather() {
             <Chart
               className="chart"
               options={options}
-              curve="smooth"
+             
               type="area"
               width="100%"
               series={options.series}
