@@ -1,9 +1,20 @@
 .weather {
   width: 55%;
+  z-index: 4;
+  padding:15px 30px 15px 15px;
+  box-shadow: 0 8px 10px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 10%),
+    0 -8px 12px 0 rgb(0 0 0 / 5%), 0 -2px 3px -2px rgb(0 0 0 / 1%);
+ 
+  background-color: white;
+  /* position: absolute; */
   margin: 20px auto;
+  left: 20%;
+ 
 }
 .weatherContainer {
   width: 100%;
+  background-color: white;
+
   margin: auto;
 }
 .searchBox {
@@ -84,6 +95,7 @@ ul {
 }
 .dailyForecast {
   margin:4px;
+  text-align: center;
 border-radius:3px ;
   background-color:#F9FBE7;
 }
@@ -96,6 +108,7 @@ border-radius:3px ;
   margin-top: 20px;
   font-size: 18px;
   font-weight: 600;
+  text-align: center;
   width: 100%;
   box-shadow: 0 8px 10px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 10%),
     0 -8px 12px 0 rgb(0 0 0 / 5%), 0 -2px 3px -2px rgb(0 0 0 / 1%);
