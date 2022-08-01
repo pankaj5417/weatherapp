@@ -42,14 +42,7 @@
   width: 98%;
   outline: coral;
   margin-bottom: 0;
-  /* border: 1px solid black;
-    border-radius: 5px;
-    width: 55%;
-    height: 60px;
-    margin: auto;
-    padding: 8px;
-    display: flex;
-    align-items: center; */
+  
 }
 
 ::placeholder {
@@ -59,14 +52,17 @@
 ul {
   list-style: none;
 }
+.searchOutputContainer{
+  width: 100%;
+}
 .searchListContainer {
   box-shadow: 0 8px 10px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 10%),
     0 -8px 12px 0 rgb(0 0 0 / 5%), 0 -2px 3px -2px rgb(0 0 0 / 1%);
   border-radius: 8px;
-  width: 96.5%;
+  width: 98%;
 
   height: 55px;
-  padding: 1rem 1.75rem 1rem 1rem;
+  padding: 1rem 1rem 1rem 1rem;
   margin-top: 0;
 }
 .searchList {
@@ -86,6 +82,7 @@ ul {
   height: 200px;
   overflow-x: scroll;
   display: flex;
+  padding-right: 15px;
   margin: auto;
 }
 .list{
@@ -94,9 +91,9 @@ ul {
 
 }
 .dailyForecast {
-  margin:4px;
+  margin-top:4px;
   text-align: center;
-border-radius:3px ;
+  border-radius:3px ;
   background-color:#F9FBE7;
 }
 .icon {
