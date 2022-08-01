@@ -4,7 +4,7 @@ import { debounce } from "lodash";
 import { DateTime } from "luxon";
 import Chart from "react-apexcharts";
 import moment from "moment";
-import cities from 'cities.json';
+import cities from "cities.json";
 
 import { useState } from "react";
 import "./weather.css";
@@ -18,15 +18,15 @@ function Weather() {
   const [latitude, setLatitude] = useState(null);
   const [lng, setLng] = useState(null);
   const [status, setStatus] = useState(null);
-  const [border,setBorder]=useState("")
-  const [hr,setHr]=useState([])
-  const [list, setList] = useState(forcast&&forcast[0]?.dt);
+  const [border, setBorder] = useState("");
+  const [hr, setHr] = useState([]);
+  const [list, setList] = useState(forcast && forcast[0]?.dt);
 
-    const handleList = (title) => {
-        let temp = forcast?.filter((p) => p.dt === title);
-        setList(temp);
-    };
-    console.log(list);
+  const handleList = (title) => {
+    let temp = forcast?.filter((p) => p.dt === title);
+    setList(temp);
+  };
+  console.log(list);
 
   var options = {
     chart: {
@@ -36,7 +36,7 @@ function Weather() {
       curve: "smooth",
     },
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     fill: {
       type: "gradient",
@@ -44,8 +44,8 @@ function Weather() {
         shadeIntensity: 1,
         opacityFrom: 0.7,
         opacityTo: 0.9,
-        stops: [0, 90, 100]
-      }
+        stops: [0, 90, 100],
+      },
     },
     series: [
       {
@@ -54,7 +54,7 @@ function Weather() {
       },
     ],
     xaxis: {
-      categories:hr
+      categories: hr,
     },
   };
 
@@ -63,7 +63,7 @@ function Weather() {
       type: "area",
     },
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     stroke: {
       curve: "smooth",
@@ -74,7 +74,7 @@ function Weather() {
         shadeIntensity: 1,
         opacityFrom: 0.7,
         opacityTo: 0.9,
-        stops: [0, 90, 100]
+        stops: [0, 90, 100],
       },
       colors: ["#F9A825", "#FF8F00", "#9C27B0"],
     },
@@ -119,10 +119,7 @@ function Weather() {
           setStatus(null);
           setLatitude(position.coords.latitude);
           setLng(position.coords.longitude);
-          getAddress();
-          getCity(position.coords.latitude,position.coords.longitude)
-         // getgeoLocation()
-
+          ipLookUp();
         },
         () => {
           setStatus("Unable to retrieve your location");
@@ -130,46 +127,20 @@ function Weather() {
       );
     }
   };
-//console.log(typeof latitude,lng)
-  function getCity(lati,long){
-   const cityname= cities.filter((c)=>{   
-      return (lati?.toFixed(2)===((+c.lat).toFixed(2)) && long?.toFixed(2)===((+c.lng).toFixed(2)))
-       
-      
-   })
-    console.log('cityname',cityname[0].name)
-    console.log('cityname')
 
-
-    setCity(cityname[0].name)
+  async function ipLookUp() {
+    const res = await fetch("http://ip-api.com/json", {});
+    const resData = await res.json();
+    console.log("res", resData);
+    setCity(resData.city);
+    setLatitude(resData.lat);
+    setLng(resData.lon);
+    getWeather(resData.city);
   }
-/*
- async function getgeoLocation(){
-   const res= fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAH5gK2NXfXvDSDJAyUi6Na8qWL8xCrLk4',{
-      method:"POST",
-      headers:{
-        'Content-Type':"application/json"
-      },
-      mode:"no-cors"
-    })
-    const data=await res.json()
-    console.log("location",data)
-
-  }
-
-  console.log(cities)
-  */
-
-  const getAddress = async () => {
-    const res = await axios.get(
-      `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${lng}&exclude=current,minutelyalerts&units=metric&appid=1fe85b3ad8fa502e23bf446831171936`
-    );
-    console.log("data", res);
-  };
 
   const handleChange = (e) => {
     const inputVal = e.target.value;
-    
+
     setCity(inputVal);
     debounceWeather(inputVal);
   };
@@ -185,10 +156,9 @@ function Weather() {
     }
   }
 
-  
   useEffect(() => {
     weatherData && getWeather2();
-  }, [weatherData]);
+  }, [weatherData, city]);
 
   const debounceWeather = debounce((query) => {
     getWeather(query);
@@ -199,27 +169,23 @@ function Weather() {
   async function getWeather2() {
     let lat = await weatherData?.coord.lat;
     let lon = await weatherData?.coord.lon;
-    try{
+    try {
       const res = await axios.get(
         `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutelyalerts&units=metric&appid=1fe85b3ad8fa502e23bf446831171936`
       );
       console.log(res.data.daily);
       console.log(res);
       setData(res.data.hourly.map((d) => Math.round(d.temp)));
-      // setHr(res.data.hourly.map((d) => new Date(d.dt * 1000).toLocaleTimeString(
-      //   "en-IN"
-      // )))
 
-      setHr(res.data.hourly.map((d) => formatToLocaleTime(
-        d.dt,
-        weatherData?.timezone,
-        "hh"
-      )))
-      
+      setHr(
+        res.data.hourly.map((d) =>
+          formatToLocaleTime(d.dt, weatherData?.timezone, "hh")
+        )
+      );
+
       setForcast(res.data.daily);
-
-    }catch(err){
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -250,6 +216,7 @@ function Weather() {
             />
             <img
               className="searchIcon"
+              onClick={handleChange}
               src="https://cdn-icons-png.flaticon.com/128/54/54481.png"
               alt=""
             />
@@ -281,9 +248,15 @@ function Weather() {
             </>
           )}
           <div className="dailyForcastContainer">
-            {forcast?.map((fdata,ind) => (
+            {forcast?.map((fdata, ind) => (
               <>
-                <div key={fdata.dt}  onClick={() => handleList(fdata.dt)} className={`dailyForecast ${list&&list[0]?.dt === fdata.dt ? "list" : ""}`}  >
+                <div
+                  key={fdata.dt}
+                  onClick={() => handleList(fdata.dt)}
+                  className={`dailyForecast ${
+                    list && list[0]?.dt === fdata.dt ? "list" : ""
+                  }`}
+                >
                   <p>
                     {formatToLocaleTime(
                       fdata.dt,
@@ -324,7 +297,6 @@ function Weather() {
             <Chart
               className="chart"
               options={options}
-             
               type="area"
               width="100%"
               series={options.series}
@@ -332,18 +304,17 @@ function Weather() {
           </div>
           <br />
           <div>
-        <div style={{padding:'5px'}}>
-                    <iframe
-                        title={city}
-                        src={`https://maps.google.com/maps?q=${city}=&z=13&ie=UTF8&iwloc=&output=embed`}
-                        
-                        border="0" 
-                        width="100%" 
-                        height="450" 
-                        style={{border:"0"}}
-                    />
-                </div>
-    </div>
+            <div style={{ padding: "5px" }}>
+              <iframe
+                title={city}
+                src={`https://maps.google.com/maps?q=${city}=&z=13&ie=UTF8&iwloc=&output=embed`}
+                border="0"
+                width="100%"
+                height="450"
+                style={{ border: "0" }}
+              />
+            </div>
+          </div>
           <br />
           <div className="humidPressContainer flex">
             <div className="pressure">
@@ -389,7 +360,6 @@ function Weather() {
           />
         </div>
       </div>
-      
     </>
   );
 }
