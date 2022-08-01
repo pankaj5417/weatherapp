@@ -21,10 +21,49 @@ function Weather() {
   const [border, setBorder] = useState("");
   const [hr, setHr] = useState([]);
   const [list, setList] = useState(forcast && forcast[0]?.dt);
+  const [day,setDay]=useState("")
+  const [date,setDate]=useState("")
+  const [humidity,setHumidity]=useState("")
+  const [pressure,setPressure]=useState("")
+  const [sunrise,setSunrise]=useState("")
+  const [sunset,setSunset]=useState("")
 
-  const handleList = (title) => {
-    let temp = forcast?.filter((p) => p.dt === title);
+
+  const handleList = (fdata) => {
+    let temp = forcast?.filter((p) => p.dt === fdata.dt);
     setList(temp);
+   
+     const tday= formatToLocaleTime(
+        fdata.dt,
+        weatherData?.timezone,
+        "cccc"
+      )
+       setDay(tday)
+      // const tdate= formatToLocaleTime(
+      //   fdata.dt,
+      //   weatherData?.timezone,
+      //   "LLLL d yyyy"
+      // )
+      const tdate=new Date(fdata.sunrise * 1000).toLocaleDateString(
+        "en-IN"
+      )
+
+   // const tdate=  new Date(dt*1000-(weatherData?.timezone*1000))
+      setDate(tdate)
+      setHumidity(fdata.humidity)
+      setPressure(fdata.pressure)
+      const srise=new Date(fdata.sunrise * 1000).toLocaleTimeString(
+        "en-IN"
+      )
+      setSunrise(srise)
+      const sset=new Date(fdata.sunrise * 1000).toLocaleTimeString(
+        "en-IN"
+      )
+      setSunset(sset)
+
+
+
+  
   };
   console.log(list);
 
@@ -84,11 +123,11 @@ function Weather() {
         name: "dayInfo",
 
         data: [
-          `${new Date(weatherData?.sys.sunrise * 1000).toLocaleTimeString(
+          `${sunrise?sunrise:new Date(weatherData?.sys.sunrise * 1000).toLocaleTimeString(
             "en-IN"
           )}`,
           "12pm",
-          `${new Date(weatherData?.sys.sunset * 1000).toLocaleTimeString(
+          `${sunset?sunset:new Date(weatherData?.sys.sunset * 1000).toLocaleTimeString(
             "en-IN"
           )}`,
         ],
@@ -96,11 +135,11 @@ function Weather() {
     ],
     xaxis: {
       categories: [
-        `${new Date(weatherData?.sys.sunrise * 1000).toLocaleTimeString(
+        `${sunrise?sunrise:new Date(weatherData?.sys.sunrise * 1000).toLocaleTimeString(
           "en-IN"
         )}`,
         "12pm",
-        `${new Date(weatherData?.sys.sunset * 1000).toLocaleTimeString(
+        `${sunset?sunset:new Date(weatherData?.sys.sunset * 1000).toLocaleTimeString(
           "en-IN"
         )}`,
       ],
@@ -149,7 +188,7 @@ function Weather() {
       const res = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?q=${cityname}&units=metric&appid=1fe85b3ad8fa502e23bf446831171936`
       );
-      console.log(res.data);
+      console.log("weatherRes",res);
       setWeatherData(await res.data);
     } catch (err) {
       console.log(err);
@@ -158,7 +197,7 @@ function Weather() {
 
   useEffect(() => {
     weatherData && getWeather2();
-  }, [weatherData, city]);
+  }, [weatherData]);
 
   const debounceWeather = debounce((query) => {
     getWeather(query);
@@ -252,7 +291,7 @@ function Weather() {
               <>
                 <div
                   key={fdata.dt}
-                  onClick={() => handleList(fdata.dt)}
+                  onClick={() => handleList(fdata)}
                   className={`dailyForecast ${
                     list && list[0]?.dt === fdata.dt ? "list" : ""
                   }`}
@@ -286,8 +325,10 @@ function Weather() {
               <p>Weather Information</p>
               <p>{weatherData?.name}</p>
 
-              <p>Day: {moment().format("dddd")}</p>
-              <p>Date: {moment().format("LL")}</p>
+              {/* <p>Day: {moment().format("dddd")}</p> */}
+              <p>Day: {day?day:moment().format("dddd")}</p>
+
+              <p>Date: {date?date:moment().format("LL")}</p>
             </>
           )}
           <br />
@@ -319,11 +360,11 @@ function Weather() {
           <div className="humidPressContainer flex">
             <div className="pressure">
               <p>Pressure</p>
-              <p>{weatherData?.main.pressure}&nbsp; hpa</p>
+              <p>{pressure?pressure:weatherData?.main.pressure}&nbsp; hpa</p>
             </div>
             <div className="humidity">
               <p>Humidity</p>
-              <p> {weatherData?.main.humidity} &nbsp; %</p>
+              <p> {humidity?humidity:weatherData?.main.humidity} &nbsp; %</p>
             </div>
           </div>
 
@@ -331,7 +372,7 @@ function Weather() {
             <div className="sunrise">
               <p>Sunrise</p>
               <p>
-                {weatherData &&
+                {sunrise?sunrise:weatherData &&
                   new Date(weatherData?.sys.sunrise * 1000).toLocaleTimeString(
                     "en-IN"
                   )}
@@ -341,7 +382,7 @@ function Weather() {
               <p>Sunset</p>
               <p>
                 {" "}
-                {weatherData &&
+                {sunset?sunset:weatherData &&
                   new Date(weatherData?.sys.sunset * 1000).toLocaleTimeString(
                     "en-IN"
                   )}
